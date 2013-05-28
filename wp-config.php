@@ -21,7 +21,7 @@ define('DB_NAME', 'cliclu');
 define('DB_USER', 'root');
 
 /** MySQL 数据库密码 */
-define('DB_PASSWORD', 'Manman520');
+define('DB_PASSWORD', '330792203');
 
 /** MySQL 主机 */
 define('DB_HOST', 'localhost');
