@@ -75,18 +75,25 @@ function my_admin_menu() {
 
 function cliclu_nav_options()
 {
-	if(!get_option('catlist'))
+	$cat_list = get_option('catlist');
+	if(!$cat_list)
 		add_option( 'catlist');
 	$cat_name = 'app';
 	if(!get_cat_ID( $cat_name )) 
 		wp_create_category( $cat_name);
   	$cat_parent_ID = get_cat_ID( $cat_name );
 
+/*
 	$args = array(
 	 'hide_empty'				=> 0,
      'child_of'                 => $cat_parent_ID
       );
 	$categories = get_categories($args);
+
+*/
+	foreach($cat_list as $key => $cat){
+		$categories[$key] =  get_category($cat,false);		
+	}
 	?>
 	<div class="cat-list">
 		<ul>
