@@ -161,20 +161,28 @@ function cliclu_nav_options()
    	<?php
 }
 
+/**
+ * creat two ajax nonce for cat queue and cat creat. here use one because they are in a same page.
+ */
+
 add_action( 'admin_enqueue_scripts', 'my_enqueue' );
 function my_enqueue($hook) {
+	
+	$cat_ajax_nonce = wp_create_nonce("cat-nonce");
         
 	wp_enqueue_script( 'ajax-script', get_template_directory_uri().'/js/cliclu-admin-ajax.js', array('jquery'));
 
 	// in javascript, object properties are accessed as ajax_object.ajax_url, ajax_object.we_value
 	wp_localize_script( 'ajax-script', 'ajax_object',
-            array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ));
+            array( 'ajax_url' => admin_url( 'admin-ajax.php' ),'ajax_cat_nonce'=>$cat_ajax_nonce ));
 }
 
 
  // Same handler function...
 
 function cliclu_cat() {
+	//check nonce
+	check_ajax_referer( 'cat-nonce', 'security' );
 
   	$parent_name = 'app';
   	$cat_parent_ID = get_cat_ID( $parent_name );
@@ -189,12 +197,13 @@ function cliclu_cat() {
     	'count'=> $new_cat->count
     );
     wp_send_json($return);	
-    die(); 
 }
 add_action('wp_ajax_nopriv_cliclu_cat', 'cliclu_cat');
 add_action('wp_ajax_cliclu_cat', 'cliclu_cat');
 
 function cliclu_cat_del() {
+	//check nonce
+	check_ajax_referer( 'cat-nonce', 'security' );
 
     $cat_ID = $_POST['catid'];  
 
@@ -209,6 +218,8 @@ add_action('wp_ajax_cliclu_cat_del', 'cliclu_cat_del');
 
 
 function cliclu_cat_list() {
+	//check nonce
+	check_ajax_referer( 'cat-nonce', 'security' );
 
     $results = '';  
     

@@ -1,6 +1,7 @@
 jQuery(document).ready(function($) {
 	var catdata = {
 		action: 'cliclu_cat',
+		security:ajax_object.ajax_cat_nonce,
 		cattitle: ''
 	};
 	$('.cat-creat-area .sub-cat').click(function(){
@@ -38,6 +39,7 @@ jQuery(document).ready(function($) {
 	});
 	var catdel = {
 		action: 'cliclu_cat_del',
+		security:ajax_object.ajax_cat_nonce,		
 		catid: -1
 	}
 	$('.cat-li .del').live('click',function(){
@@ -54,6 +56,7 @@ jQuery(document).ready(function($) {
 	function refresh_list(){
 		var catlist = {
 			action: 'cliclu_cat_list',
+			security:ajax_object.ajax_cat_nonce,
 			catlist: {}		
 		}
 		$('.cat-li').each(function(i,n){
