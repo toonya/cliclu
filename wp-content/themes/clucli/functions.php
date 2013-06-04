@@ -245,10 +245,29 @@ add_action('wp_ajax_cliclu_cat_list', 'cliclu_cat_list');
 /**
  *add cunstom post type
  */
+
+
+
 new ty_page_buld('app'); 
 class ty_page_buld      
 {
 	protected $args = array(
+	
+			'labels' => array(
+			                'name' => '网址导航',
+			                'singular_name' => '网址导航',
+			                'add_new' => '添加新的导航',
+			                'add_new_item' => '添加新的导航',
+			                'edit' => '编辑',
+			                'edit_item' => '编辑导航',
+			                'new_item' => '添加新的导航',
+			                'view' => '查看',
+			                'view_item' => '查看导航',
+			                'search_items' => '搜索导航',
+			                'not_found' => '当前没有添加任何导航',
+			                'not_found_in_trash' => '垃圾箱里没有任何导航',
+			                'parent' => '导航上级目录'
+			            ),
 		    'public' => true,
 		    'publicly_queryable' => true,
 		    'show_ui' => true, 
@@ -411,13 +430,40 @@ class ty_section_meta
 						break;
 						case 'image':  
 							add_thickbox();
-						    $image = get_template_directory_uri().'/images/image.png';    
-						    echo '<span class="custom_default_image" style="display:none">'.$image.'</span>';  
-						    if ($meta) { $image = wp_get_attachment_image_src($meta, 'medium'); $image = $image[0]; }                 
+							  
+							?>
+							<div class="current">
+								<span class="title">当前显示</span>
+							<?php 
+									if ($meta) { 
+										$image = $meta;
+										?>
+									<img class="custom_preview_image" src="<?php echo $image; ?>" alt="" />
+										<?php 
+										} 
+									else{
+										
+									?>
+									<img class="custom_preview_image" src="" alt="" />
+									<?php
+									
+										}	
+										
+										?>
+
+							</div>
+							
+							<div class="defalt-img">
+								<ul>
+									<li><img src="<?php echo get_template_directory_uri().'/images/film.png'; ?>" alt="" /></li>
+									<li><img src="<?php echo get_template_directory_uri().'/images/music.png'; ?>" alt="" /></li>
+								</ul>
+							</div>
+							<?php
+						                  
 						    echo    '<input name="'.$field['id'].'" type="hidden" class="custom_upload_image" value="'.$meta.'" /> 
-						                <img src="'.$image.'" class="custom_preview_image" alt="" /><br /> 
-						                    <input class="custom_upload_image_button button" type="button" value="Choose Image" /> 
-						                    <small> <a href="#" class="custom_clear_image_button">Remove Image</a></small> 
+						                    <input class="custom_upload_image_button button" type="button" value="选择或者上传图像" /> 
+						                    <small> <a href="#" class="custom_clear_image_button">移除当前图像</a></small> 
 						                    <br clear="all" /><span class="description">'.$field['desc'].'';  
 						break; 
 						// tax_select  
