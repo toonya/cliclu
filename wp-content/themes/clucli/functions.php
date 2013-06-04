@@ -429,8 +429,8 @@ class ty_section_meta
 						        <br /><span class="description">'.$field['desc'].'</span><br /><br />';  
 						break;
 						case 'image':  
-							add_thickbox();
-							  
+							wp_enqueue_media();
+  
 							?>
 							<div class="current">
 								<span class="title">当前显示</span>
@@ -462,7 +462,7 @@ class ty_section_meta
 							<?php
 						                  
 						    echo    '<input name="'.$field['id'].'" type="hidden" class="custom_upload_image" value="'.$meta.'" /> 
-						                    <input class="custom_upload_image_button button" type="button" value="选择或者上传图像" /> 
+						                    <input class="ty-open-media button" type="button" value="选择或者上传图像" /> 
 						                    <small> <a href="#" class="custom_clear_image_button">移除当前图像</a></small> 
 						                    <br clear="all" /><span class="description">'.$field['desc'].'';  
 						break; 
