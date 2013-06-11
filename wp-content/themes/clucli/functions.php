@@ -81,7 +81,9 @@ add_action('wp_enqueue_scripts','cliclu_front_init');//模版页面中包含 wp_
 
 
 add_action('admin_enqueue_scripts','cliclu_init');   //回调函数用函数组把指针和方程传过去 也可以直接用function(){code herr...}
- 
+
+
+//! normal nav admin menu 
 add_action( 'admin_menu', 'my_admin_menu' );
 function my_admin_menu() {
     add_menu_page( '普通导航管理页面', '普通导航', 'edit_theme_options', 'nav-options', 'cliclu_nav_options' );
@@ -95,7 +97,7 @@ function cliclu_nav_options()
 	$cat_name = 'app';
 	if(!get_cat_ID( $cat_name )) 
 		wp_create_category( $cat_name);
-  	$cat_parent_ID = get_cat_ID( $cat_name );
+	$cat_parent_ID = get_cat_ID( $cat_name );
 
 /*
 	$args = array(
@@ -162,7 +164,7 @@ function cliclu_nav_options()
 }
 
 /**
- * creat two ajax nonce for cat queue and cat creat. here use one because they are in a same page.
+ * //!creat two ajax nonce for cat queue and cat creat. here use one because they are in a same page.
  */
 
 add_action( 'admin_enqueue_scripts', 'my_enqueue' );
@@ -370,7 +372,7 @@ class ty_section_meta
 		     array(  
 		        'label'=> 'name',  
 		        'desc'  => '在这里填写需要添加的 项目 标题',  
-		        'id'    => /* $this->prefix_sec. */'title',  
+		        'id'    => /* $this->prefix_sec. */'post_title',  
 		        'type'  => 'title'  
 		    ),
 	    	array(
@@ -537,5 +539,89 @@ class ty_section_meta
 }
 
 new ty_section_meta();
+
+
+
+
+//! tree-nav list
+
+function tree_settings_api_init() {
+ 	// Add the section to reading settings so we can add our
+ 	// fields to it
+ 	add_settings_section('tree_setting_section',
+		'在这里修改或上传首页的树形导航',
+		'tree_setting_section',
+		'tree-nav');
+ 	
+ 	// Add the field with the names and function to use for our new
+ 	// settings, put it in our new section
+ 	// 这里暂时不需要
+/* 
+ 	add_settings_field('test',
+		'(1)',
+		'tree_setting_field',
+		'tree-nav-group',
+		'tree_setting_section');
+*/
+ 	
+ 	// Register our setting so that $_POST handling is done for us and
+ 	// our callback function just has to echo the <input>
+ 	register_setting('tree-nav','tree-img');
+ 	register_setting('tree-nav','tree-url');
+ }// eg_settings_api_init()
+ 
+ 
+add_action('admin_init', 'tree_settings_api_init');
+//! shows options content
+function tree_setting_section(){
+	$nun_of_leaf   = 8;
+	$urls          = get_option('tree-url');
+	$imgs          = get_option('tree-img');
+	
+	echo '<div class="leaf-nav">';
+	
+	for($i=0;$i<$nun_of_leaf;$i++){
+		?>
+		<div class="leaf">
+			<div class="leaf-num">( <?php echo $i; ?> )</div>
+			<div class="leaf-info">
+				<div class="leaf-url">
+					<span>输入网址</span>
+					<input type="text" value="<?php echo $urls[$i]; ?>" name="tree-url[<?php echo $i; ?>]" id="tree-url[<?php echo $i; ?>" />
+				</div>
+				<div class="leaf-img">
+					<a href="#" class="upload-leaf">上传树叶</a>
+					<img src="<?php echo $imgs[$i]; ?>" alt="" />
+					<input type="text" value="<?php echo $imgs[$i]; ?>" name="tree-img[<?php echo $i; ?>]" id="tree-img[<?php echo $i; ?>" />					
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+	
+	echo'</div>';
+}
+//! tree-nav page 
+
+add_action( 'admin_menu', 'tree_admin_menu' );
+function tree_admin_menu() {
+    add_menu_page( '树形导航', '树形导航', 'edit_theme_options', 'tree-options', 'tree_options' );
+}
+
+function tree_options() {
+?>
+    <div class="wrap">
+        <div><br></div>
+        <h2>树形导航</h2>
+
+        <form method="post" action="options.php">
+            <?php settings_fields( 'tree-nav' ); ?>
+            <?php do_settings_sections( 'tree-nav' ); ?>
+            <?php submit_button(); ?>
+        </form>
+    </div>
+<?php
+}
+
         		
 ?>

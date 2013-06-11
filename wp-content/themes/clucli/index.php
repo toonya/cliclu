@@ -36,7 +36,32 @@
 	<header></header>
 
 	<div id="main" class="wrapper">
+	<div id="nav">
+		<ul>
+			<?php 
+					$cat_list = get_option('catlist');
+					$cat_parent_ID = get_cat_ID( 'app' );
 
+					if($cat_list){
+						foreach($cat_list as $key => $cat){
+							$categories[$key] =  get_category($cat,false);		
+						}
+						
+						foreach ($categories as $category) {
+						?>
+						<li class="cat-li" catno="<?php echo $category->cat_ID; ?>" catcount="<?php echo $category->count; ?>">
+							<a href="#" class="cat-title"><?php echo $category->name; ?></a>
+						</li>
+					    <?php  
+						}		
+
+					}
+					
+			
+				
+			?>
+		</ul>
+	</div>
 	<div id="primary" class="site-content">
 		<div id="content" role="main">
 			<div class="list-nav">
@@ -56,9 +81,11 @@
 						$id =  get_the_ID();
 						$custom_text = get_post_custom($id);
 						echo '<li><a href="'.$custom_text['app_url'][0].'">';
-						$img = wp_get_attachment_image_src( $custom_text['app_image'][0], $size, $icon );
-						echo '<div class="nav-img"><img src="'.$img[0].'" /></div>';
-						echo '<div class="nav-title">'.$custom_text['title'][0].'</div></a></li>';
+						$img = $custom_text['app_image'][0];
+						echo '<div class="nav-img"><img src="'.$img.'" /></div>';
+						echo '<div class="nav-title">';
+						the_title();
+						echo '</div></a></li>';
 					endwhile;
 					
 					/* Restore original Post Data 
